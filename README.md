@@ -2,7 +2,8 @@
 This project is Kajetan Kurkiewicz's Netguru recruitment automation assignement.
 
 ## Requirements
-This project requires latest version of Node.js is required. You can download it from here https://nodejs.org/en/.
+This project requires latest version of Node.js. You can download it from here https://nodejs.org/en/.
+
 It uses Cypress as a framework for UI tests automation.
 
 ## Instalation
@@ -15,7 +16,8 @@ After Cypress and other packages are installed, you are ready to run tests.
 ## Running tests
 To run tests you can either use Cypress GUI or run them through console. 
 
-### To open GUI type 
+### To open GUI 
+Type 
 ```
 npx cypress open 
 ```
@@ -28,7 +30,8 @@ npx cypress run
 ```
 to run all tests in this repository. 
 
-You may also specify a spec (test scenario) you want to run using --spec
+You may also specify a spec (test scenario) you want to run using --spec param followed with file path.
+
 For example:
 ```
 npx cypress run --spec "cypress/e2e/spec.cy.js"
