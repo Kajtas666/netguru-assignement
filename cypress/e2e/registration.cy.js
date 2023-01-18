@@ -3,9 +3,6 @@ const registrationPage = require("/cypress/pages/registrationPage.js");
 const randomEmail = require("random-email");
 
 describe("Register an account", () => {
-  const websiteUrl = "https://guitarcenter.pl/";
-  const websiteRegistrationPageUrl =
-    "https://guitarcenter.pl/catalog/logreg.php";
   const firstName = "John";
   const lastName = "Doe";
   const emailAddress = randomEmail();
@@ -13,13 +10,8 @@ describe("Register an account", () => {
   const password = "verystrongpassword";
 
   beforeEach("Open registration page", () => {
-    cy.visit(websiteUrl);
-    homePage.registrationButton.click();
-    cy.url().should("eq", websiteRegistrationPageUrl);
-  });
-
-  it("should open correct url", () => {
-    cy.url().should("eq", websiteRegistrationPageUrl);
+    cy.visit("");
+    homePage.openRegistrationPage();
   });
 
   it("should display, fill in and send registration form", () => {
@@ -31,35 +23,33 @@ describe("Register an account", () => {
       "Hasło",
       "Powtórz hasło",
     ];
-    labels.forEach((label) => {
-      registrationPage.getLabelByName(label).should("be.visible");
-    });
 
-    registrationPage.firstName.type(firstName);
-    registrationPage.lastName.type(lastName);
-    registrationPage.emailAddress.type(emailAddress);
-    registrationPage.telephone.type(telephoneNumber);
-    registrationPage.password.type(password);
-    registrationPage.passwordConfirmation.type(password);
+    registrationPage.checkLabels(labels);
 
-    registrationPage.getLabelByName("Akceptuję regulamin sklepu").click();
+    registrationPage.fillInRegistrationForm(
+      firstName,
+      lastName,
+      emailAddress,
+      telephoneNumber,
+      password
+    );
 
-    registrationPage.submitButton.click();
+    registrationPage.acceptRules();
 
-    cy.contains("Twoje konto zostało założone").should("be.visible");
-    cy.contains(
-      "Rejestracja powiodła się. Twoje konto zostało założone i jest już aktywne!"
-    ).should("be.visible");
-    cy.contains(
-      "Na podany przez Ciebie adres email wysłaliśmy potwierdzenie rejestracji."
-    ).should("be.visible");
-    cy.contains("Dziękujemy i życzymy udanych zakupów!").should("be.visible");
+    registrationPage.submitForm();
+
+    const successMessages = [
+      "Twoje konto zostało założone",
+      "Rejestracja powiodła się. Twoje konto zostało założone i jest już aktywne!",
+      "Na podany przez Ciebie adres email wysłaliśmy potwierdzenie rejestracji.",
+      "Dziękujemy i życzymy udanych zakupów!",
+    ];
+
+    registrationPage.checkSuccessMessages(successMessages);
   });
 
   it("should not be possible to submit an empty form", () => {
-    registrationPage.submitButton.click();
-    cy.contains("Wypełnij poprawnie wskazane pola formularza").should(
-      "be.visible"
-    );
+    registrationPage.submitForm();
+    cy.contains("Wypełnij poprawnie wskazane pola formularza").should("be.visible");
   });
 });
